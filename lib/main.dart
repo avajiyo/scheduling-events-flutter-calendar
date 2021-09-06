@@ -63,6 +63,40 @@ class EventCalendarState extends State<EventCalendar> {
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          title: const Text('AppBar Demo'),
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.add_alert),
+              tooltip: 'Show Snackbar',
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('This is a snackbar')));
+              },
+            ),
+            IconButton(
+              icon: const Icon(Icons.help_outline),
+              tooltip: 'Go to the next page',
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute<void>(
+                  builder: (BuildContext context) {
+                    return Scaffold(
+                      appBar: AppBar(
+                        title: const Text('How do I use this app?'),
+                      ),
+                      body: const Center(
+                        child: Text(
+                          'This is the next page',
+                          style: TextStyle(fontSize: 24),
+                        ),
+                      ),
+                    );
+                  },
+                ));
+              },
+            ),
+          ],
+        ),
         body: Padding(
             padding: const EdgeInsets.fromLTRB(5, 0, 5, 5),
             child: getEventCalendar(_calendarView, _events, onCalendarTapped)));
@@ -174,18 +208,20 @@ class EventCalendarState extends State<EventCalendar> {
     eventNameCollection.add('Performance Check');
 
     _colorCollection = <Color>[];
+    _colorCollection.add(const Color(0xFF010101));
     _colorCollection.add(const Color(0xFFFFB932));
     _colorCollection.add(const Color(0xFF8EE380));
     _colorCollection.add(const Color(0xFFFF48E2));
     _colorCollection.add(const Color(0xFFCBB9FF));
-    _colorCollection.add(const Color(0xFF010101));
+    _colorCollection.add(const Color(0xFFCBB9FF));
 
     _colorNames = <String>[];
+    _colorNames.add('ESSENTIALS');
     _colorNames.add('MANAGE');
     _colorNames.add('FOCUS');
     _colorNames.add('DELEGATE');
     _colorNames.add('AVOID');
-    _colorNames.add('ESSENTIALS');
+    _colorNames.add('Test');
 
     _timeZoneCollection = <String>[];
     _timeZoneCollection.add('Default Time');

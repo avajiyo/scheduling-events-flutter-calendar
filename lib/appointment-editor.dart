@@ -44,16 +44,16 @@ class AppointmentEditorState extends State<AppointmentEditor> {
                 ),
                 title: Row(children: <Widget>[
                   const Expanded(
-                    child: Text('All-day'),
+                    child: Text('Recurring'),
                   ),
                   Expanded(
                       child: Align(
                           alignment: Alignment.centerRight,
                           child: Switch(
-                            value: _isAllDay,
+                            value: _isRecurring,
                             onChanged: (bool value) {
                               setState(() {
-                                _isAllDay = value;
+                                _isRecurring = value;
                               });
                             },
                           ))),
@@ -100,7 +100,7 @@ class AppointmentEditorState extends State<AppointmentEditor> {
                       ),
                       Expanded(
                           flex: 3,
-                          child: _isAllDay
+                          child: _isRecurring
                               ? const Text('')
                               : GestureDetector(
                                   child: Text(
@@ -179,7 +179,7 @@ class AppointmentEditorState extends State<AppointmentEditor> {
                       ),
                       Expanded(
                           flex: 3,
-                          child: _isAllDay
+                          child: _isRecurring
                               ? const Text('')
                               : GestureDetector(
                                   child: Text(
@@ -333,7 +333,8 @@ class AppointmentEditorState extends State<AppointmentEditor> {
                             ? ''
                             : _timeZoneCollection[_selectedTimeZoneIndex],
                         description: _notes,
-                        isAllDay: _isAllDay,
+                        //TO-DO: Make it so that user can select and assign recurring properties if _isRecurring is true
+                        //recurringProperties: _isRecurring,
                         eventName: _subject == '' ? '(No title)' : _subject,
                       ));
 

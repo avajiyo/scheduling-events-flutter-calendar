@@ -35,20 +35,20 @@ late DateTime _startDate;
 late TimeOfDay _startTime;
 late DateTime _endDate;
 late TimeOfDay _endTime;
-bool _isAllDay = false;
+bool _isRecurring = false;
 String _subject = '';
 String _notes = '';
 
 class EventCalendarState extends State<EventCalendar> {
   EventCalendarState();
 
-  CalendarView _calendarView = CalendarView.month;
+  CalendarView _calendarView = CalendarView.week;
   late List<String> eventNameCollection;
   late List<Meeting> appointments;
 
   @override
   void initState() {
-    _calendarView = CalendarView.month;
+    _calendarView = CalendarView.week;
     appointments = getMeetingDetails();
     _events = DataSource(appointments);
     _selectedAppointment = null;
@@ -74,6 +74,13 @@ class EventCalendarState extends State<EventCalendar> {
       CalendarTapCallback calendarTapCallback) {
     return SfCalendar(
         view: _calendarView,
+        headerHeight: 70,
+        allowedViews: [
+          CalendarView.day,
+          CalendarView.workWeek,
+          CalendarView.week,
+          CalendarView.month
+        ],
         dataSource: _calendarDataSource,
         onTap: calendarTapCallback,
         initialDisplayDate: DateTime(DateTime.now().year, DateTime.now().month,
@@ -112,7 +119,7 @@ class EventCalendarState extends State<EventCalendar> {
 
     setState(() {
       _selectedAppointment = null;
-      _isAllDay = false;
+      _isRecurring = false;
       _selectedColorIndex = 0;
       _selectedTimeZoneIndex = 0;
       _subject = '';
@@ -125,7 +132,6 @@ class EventCalendarState extends State<EventCalendar> {
           final Meeting meetingDetails = calendarTapDetails.appointments![0];
           _startDate = meetingDetails.from;
           _endDate = meetingDetails.to;
-          _isAllDay = meetingDetails.isAllDay;
           _selectedColorIndex =
               _colorCollection.indexOf(meetingDetails.background);
           _selectedTimeZoneIndex = meetingDetails.startTimeZone == ''
@@ -168,26 +174,18 @@ class EventCalendarState extends State<EventCalendar> {
     eventNameCollection.add('Performance Check');
 
     _colorCollection = <Color>[];
-    _colorCollection.add(const Color(0xFF0F8644));
-    _colorCollection.add(const Color(0xFF8B1FA9));
-    _colorCollection.add(const Color(0xFFD20100));
-    _colorCollection.add(const Color(0xFFFC571D));
-    _colorCollection.add(const Color(0xFF85461E));
-    _colorCollection.add(const Color(0xFFFF00FF));
-    _colorCollection.add(const Color(0xFF3D4FB5));
-    _colorCollection.add(const Color(0xFFE47C73));
-    _colorCollection.add(const Color(0xFF636363));
+    _colorCollection.add(const Color(0xFFFFB932));
+    _colorCollection.add(const Color(0xFF8EE380));
+    _colorCollection.add(const Color(0xFFFF48E2));
+    _colorCollection.add(const Color(0xFFCBB9FF));
+    _colorCollection.add(const Color(0xFF010101));
 
     _colorNames = <String>[];
-    _colorNames.add('Green');
-    _colorNames.add('Purple');
-    _colorNames.add('Red');
-    _colorNames.add('Orange');
-    _colorNames.add('Caramel');
-    _colorNames.add('Magenta');
-    _colorNames.add('Blue');
-    _colorNames.add('Peach');
-    _colorNames.add('Gray');
+    _colorNames.add('MANAGE');
+    _colorNames.add('FOCUS');
+    _colorNames.add('DELEGATE');
+    _colorNames.add('AVOID');
+    _colorNames.add('ESSENTIALS');
 
     _timeZoneCollection = <String>[];
     _timeZoneCollection.add('Default Time');
@@ -307,7 +305,7 @@ class EventCalendarState extends State<EventCalendar> {
             to: today
                 .add(Duration(days: (month * 30) + day))
                 .add(Duration(hours: hour + 2)),
-            background: _colorCollection[random.nextInt(9)],
+            background: _colorCollection[random.nextInt(5)],
             startTimeZone: '',
             endTimeZone: '',
             description: '',
@@ -327,8 +325,6 @@ class DataSource extends CalendarDataSource {
     appointments = source;
   }
 
-  @override
-  bool isAllDay(int index) => appointments![index].isAllDay;
 
   @override
   String getSubject(int index) => appointments![index].eventName;
